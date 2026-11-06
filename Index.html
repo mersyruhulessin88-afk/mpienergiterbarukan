@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPI Fisika Kelas X - Energi Terbarukan | Mersy Ruhulessin</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        tech: {
+                            blue: '#0284c7',
+                            sky: '#0ea5e9',
+                            yellow: '#eab308',
+                        }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 12s linear infinite',
+                        'spin-medium': 'spin 5s linear infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 4s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti CDN for Quiz Rewards -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #22c55e;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #16a34a;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass-card {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-emerald-50/50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="sticky top-0 z-50 glass-card shadow-md transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Brand & Info -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('cover')">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-emerald-500 to-sky-500 flex items-center justify-center text-white shadow-lg animate-pulse-slow">
+                    <i class="fa-solid fa-leaf text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg text-emerald-800 dark:text-emerald-400 leading-tight">MPI FISIKA</h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Energi Terbarukan • Kelas X</p>
+                </div>
+            </div>
+
+            <!-- Navigation Controls -->
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <!-- Digital Clock -->
+                <div class="hidden md:flex items-center space-x-2 bg-emerald-100/70 dark:bg-gray-800 px-3 py-1.5 rounded-full text-xs font-semibold text-emerald-800 dark:text-emerald-300">
+                    <i class="fa-regular fa-clock"></i>
+                    <span id="digital-clock">00:00:00 WIT</span>
+                </div>
+
+                <!-- Nav Quick Buttons -->
+                <button onclick="navigateTo('menu')" title="Menu Utama" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-emerald-100 dark:hover:bg-gray-800 transition">
+                    <i class="fa-solid fa-house text-lg"></i>
+                </button>
+                
+                <!-- Dark Mode Toggle -->
+                <button id="theme-toggle" onclick="toggleDarkMode()" title="Ubah Mode Tampilan" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-emerald-100 dark:hover:bg-gray-800 transition">
+                    <i id="theme-toggle-dark-icon" class="fa-solid fa-moon text-lg hidden"></i>
+                    <i id="theme-toggle-light-icon" class="fa-solid fa-sun text-lg text-amber-400"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER WITH DYNAMIC PAGES -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 relative">
+
+        <!-- 1. PAGE: COVER / PEMBUKA -->
+        <section id="page-cover" class="page-content min-h-[calc(100vh-8rem)] flex flex-col justify-center items-center text-center">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-2xl border border-emerald-100 dark:border-emerald-900/40 max-w-4xl w-full relative overflow-hidden my-auto">
+                <!-- Background Glowing Orbs -->
+                <div class="absolute -top-10 -left-10 w-40 h-40 bg-emerald-400/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-sky-400/20 rounded-full blur-3xl"></div>
+
+                <!-- Hero Header -->
+                <div class="inline-block px-4 py-1.5 bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-semibold rounded-full text-xs sm:text-sm tracking-wide mb-4">
+                    MEDIA PEMBELAJARAN INTERAKTIF FISIKA
+                </div>
+                <h1 class="text-3xl sm:text-5xl font-black text-gray-900 dark:text-white tracking-tight mb-2">
+                    ENERGI <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-sky-500">TERBARUKAN</span>
+                </h1>
+                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-6 font-medium max-w-2xl mx-auto">
+                    Mata Pelajaran Fisika Kelas X SMA/MA <br>
+                    <span class="text-emerald-700 dark:text-emerald-400 font-bold">Guru Pengampu: Mersy Ruhulessin</span>
+                </p>
+
+                <!-- ANIMATED HERO ILLUSTRATION (SVG INTEGRATED) -->
+                <div class="relative w-full max-w-md mx-auto h-56 sm:h-64 my-6 bg-gradient-to-b from-sky-100 to-emerald-100 dark:from-gray-800 dark:to-gray-900 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center">
+                    <svg viewBox="0 0 500 300" class="w-full h-full">
+                        <!-- Sun & Glow -->
+                        <g class="animate-pulse">
+                            <circle cx="400" cy="70" r="35" fill="#fde047" opacity="0.9"/>
+                            <circle cx="400" cy="70" r="45" fill="#fef08a" opacity="0.4"/>
+                        </g>
+
+                        <!-- Green Hills & Water -->
+                        <path d="M 0 240 Q 150 180 300 230 T 500 220 L 500 300 L 0 300 Z" fill="#22c55e" opacity="0.8"/>
+                        <path d="M 0 260 Q 200 220 350 270 T 500 250 L 500 300 L 0 300 Z" fill="#15803d"/>
+                        <!-- Dam / Water flow -->
+                        <path d="M 320 230 C 350 250 380 280 400 300 L 500 300 L 500 230 Z" fill="#0284c7" opacity="0.8"/>
+                        <path d="M 340 240 Q 360 270 380 300" stroke="#7dd3fc" stroke-width="4" stroke-dasharray="8 4" fill="none" class="animate-pulse"/>
+
+                        <!-- Wind Turbine 1 -->
+                        <g transform="translate(100, 110)">
+                            <!-- Pole -->
+                            <rect x="-4" y="0" width="8" height="110" fill="#cbd5e1"/>
+                            <!-- Center Hub -->
+                            <circle cx="0" cy="0" r="7" fill="#64748b"/>
+                            <!-- Rotator blades -->
+                            <g class="animate-spin-slow" style="transform-origin: 0px 0px;">
+                                <path d="M 0 0 Q 8 -40 0 -70 Q -8 -40 0 0" fill="#e2e8f0"/>
+                                <path d="M 0 0 Q 40 8 70 0 Q 40 -8 0 0" fill="#cbd5e1"/>
+                                <path d="M 0 0 Q -8 40 0 70 Q 8 40 0 0" fill="#cbd5e1"/>
+                            </g>
+                        </g>
+
+                        <!-- Wind Turbine 2 (Smaller) -->
+                        <g transform="translate(180, 140) scale(0.7)">
+                            <rect x="-4" y="0" width="8" height="110" fill="#cbd5e1"/>
+                            <circle cx="0" cy="0" r="7" fill="#64748b"/>
+                            <g class="animate-spin-medium" style="transform-origin: 0px 0px;">
+                                <path d="M 0 0 Q 8 -40 0 -70 Q -8 -40 0 0" fill="#e2e8f0"/>
+                                <path d="M 0 0 Q 40 8 70 0 Q 40 -8 0 0" fill="#cbd5e1"/>
+                                <path d="M 0 0 Q -8 40 0 70 Q 8 40 0 0" fill="#cbd5e1"/>
+                            </g>
+                        </g>
+
+                        <!-- Solar Panel Grid -->
+                        <g transform="translate(250, 210) skewX(-20)">
+                            <rect x="0" y="0" width="80" height="40" rx="4" fill="#1e3a8a" stroke="#93c5fd" stroke-width="2"/>
+                            <!-- Grid lines -->
+                            <line x1="26" y1="0" x2="26" y2="40" stroke="#60a5fa" stroke-width="1.5"/>
+                            <line x1="53" y1="0" x2="53" y2="40" stroke="#60a5fa" stroke-width="1.5"/>
+                            <line x1="0" y1="20" x2="80" y2="20" stroke="#60a5fa" stroke-width="1.5"/>
+                            <!-- Reflection animation -->
+                            <polygon points="0,0 30,0 10,40 0,40" fill="#ffffff" opacity="0.2"/>
+                        </g>
+
+                        <!-- Glowing Earth Graphic -->
+                        <g transform="translate(60, 240)">
+                            <circle cx="0" cy="0" r="28" fill="#0284c7"/>
+                            <path d="M-15 -10 Q-5 -25 10 -15 Q25 -5 15 15 Q-5 25 -20 10 Z" fill="#22c55e"/>
+                            <circle cx="0" cy="0" r="28" stroke="#38bdf8" stroke-width="2" fill="none" opacity="0.6"/>
+                        </g>
+                    </svg>
+                </div>
+
+                <!-- Slogan -->
+                <p class="text-xs sm:text-sm font-semibold italic text-emerald-700 dark:text-emerald-300 mb-8">
+                    "Kenali Energi Terbarukan, Wujudkan Masa Depan Berkelanjutan!"
+                </p>
+
+                <!-- Start Button -->
+                <button onclick="navigateTo('menu')" class="inline-flex items-center justify-center space-x-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold text-lg px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition duration-200 group">
+                    <span>MULAI PEMBELAJARAN</span>
+                    <i class="fa-solid fa-circle-arrow-right text-xl group-hover:translate-x-1 transition-transform"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- 2. PAGE: MENU UTAMA -->
+        <section id="page-menu" class="page-content hidden min-h-[calc(100vh-10rem)] flex flex-col justify-center">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-2">MENU UTAMA</h2>
+                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300">Pilih menu di bawah ini untuk memulai aktivitas belajar kamu.</p>
+            </div>
+
+            <!-- 4 Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto w-full">
+                <!-- Card 1: Panduan -->
+                <div onclick="navigateTo('panduan')" class="glass-card rounded-2xl p-6 shadow-md hover:shadow-2xl border border-emerald-100 dark:border-gray-800 transition-all duration-300 transform hover:-translate-y-2 cursor-pointer flex flex-col justify-between group">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-book-open-reader"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">PANDUAN</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Petunjuk praktis cara menggunakan seluruh fitur aplikasi pembelajaran.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center text-amber-600 dark:text-amber-400 font-semibold text-sm">
+                        <span>Buka Menu</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Card 2: Tujuan Pembelajaran -->
+                <div onclick="navigateTo('tujuan')" class="glass-card rounded-2xl p-6 shadow-md hover:shadow-2xl border border-emerald-100 dark:border-gray-800 transition-all duration-300 transform hover:-translate-y-2 cursor-pointer flex flex-col justify-between group">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">TUJUAN</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Capaian pembelajaran dan kompetensi materi Energi Terbarukan.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center text-blue-600 dark:text-blue-400 font-semibold text-sm">
+                        <span>Buka Menu</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Card 3: Materi Pembelajaran -->
+                <div onclick="navigateTo('materi')" class="glass-card rounded-2xl p-6 shadow-md hover:shadow-2xl border border-emerald-100 dark:border-gray-800 transition-all duration-300 transform hover:-translate-y-2 cursor-pointer flex flex-col justify-between group">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-solar-panel"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">MATERI</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Eksplorasi konsep, jenis-jenis energi, audio penjelasan & simulasi.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center text-emerald-600 dark:text-emerald-400 font-semibold text-sm">
+                        <span>Buka Menu</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Card 4: Asesmen -->
+                <div onclick="navigateTo('asesmen')" class="glass-card rounded-2xl p-6 shadow-md hover:shadow-2xl border border-emerald-100 dark:border-gray-800 transition-all duration-300 transform hover:-translate-y-2 cursor-pointer flex flex-col justify-between group">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-clipboard-question"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">ASESMEN</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Uji pemahaman kamu melalui 15 soal kuis pilihan ganda interaktif.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center text-purple-600 dark:text-purple-400 font-semibold text-sm">
+                        <span>Buka Menu</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back to Cover button -->
+            <div class="text-center mt-10">
+                <button onclick="navigateTo('cover')" class="px-5 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 text-sm font-semibold transition">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Cover
+                </button>
+            </div>
+        </section>
+
+        <!-- 3. PAGE: PANDUAN PENGGUNAAN -->
+        <section id="page-panduan" class="page-content hidden">
+            <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-xl max-w-4xl mx-auto">
+                <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-gray-200 dark:border-gray-800">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500 text-white flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">PANDUAN PENGGUNAAN</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Petunjuk praktis untuk mengoperasikan MPI Fisika</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Steps Container -->
+                    <div class="md:col-span-2 space-y-3">
+                        <div class="flex items-start space-x-3 p-3 rounded-xl bg-emerald-50 dark:bg-gray-800/60 border border-emerald-100 dark:border-gray-700">
+                            <span class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">1</span>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Klik tombol <strong>"Mulai Pembelajaran"</strong> pada Halaman Cover untuk masuk ke Menu Utama.</p>
+                        </div>
+                        <div class="flex items-start space-x-3 p-3 rounded-xl bg-emerald-50 dark:bg-gray-800/60 border border-emerald-100 dark:border-gray-700">
+                            <span class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">2</span>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Pilih salah satu dari <strong>4 Menu Utama</strong> sesuai tahapan belajar kamu.</p>
+                        </div>
+                        <div class="flex items-start space-x-3 p-3 rounded-xl bg-emerald-50 dark:bg-gray-800/60 border border-emerald-100 dark:border-gray-700">
+                            <span class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">3</span>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Buka menu <strong>Tujuan Pembelajaran</strong> untuk mengetahui indikator pencapaian materi.</p>
+                        </div>
+                        <div class="flex items-start space-x-3 p-3 rounded-xl bg-emerald-50 dark:bg-gray-800/60 border border-emerald-100 dark:border-gray-700">
+                            <span class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">4</span>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Pada menu <strong>Materi</strong>, gunakan tombol navigasi <em>Sebelumnya / Selanjutnya</em> untuk berpindah subbab.</p>
+                        </div>
+                        <div class="flex items-start space-x-3 p-3 rounded-xl bg-emerald-50 dark:bg-gray-800/60 border border-emerald-100 dark:border-gray-700">
+                            <span class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">5</span>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Gunakan tombol <strong>Audio Penjelasan</strong> untuk mendengarkan narasi suara materi.</p>
+                        </div>
+                        <div class="flex items-start space-x-3 p-3 rounded-xl bg-emerald-50 dark:bg-gray-800/60 border border-emerald-100 dark:border-gray-700">
+                            <span class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">6</span>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Coba fitur <strong>Simulasi Interaktif</strong> &amp; <strong>Aktivitas Pencocokan</strong> pada menu Materi.</p>
+                        </div>
+                        <div class="flex items-start space-x-3 p-3 rounded-xl bg-emerald-50 dark:bg-gray-800/60 border border-emerald-100 dark:border-gray-700">
+                            <span class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">7</span>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Buka menu <strong>Asesmen</strong>, isi nama lengkap kamu, dan jawab 15 soal kuis untuk mendapatkan skor akhir.</p>
+                        </div>
+                    </div>
+
+                    <!-- Side Illustration -->
+                    <div class="flex flex-col items-center justify-center p-6 bg-amber-50 dark:bg-gray-800/40 rounded-2xl border border-amber-200 dark:border-gray-700 text-center">
+                        <div class="w-24 h-24 rounded-full bg-amber-200 dark:bg-amber-900/50 flex items-center justify-center text-amber-600 dark:text-amber-300 text-4xl mb-4 animate-float">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 dark:text-gray-200 text-base mb-1">Interactive Learning</h4>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Media ini dirancang agar peserta didik dapat belajar secara mandiri, aktif, dan menyenangkan.</p>
+                    </div>
+                </div>
+
+                <!-- Back Nav -->
+                <div class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-800">
+                    <button onclick="navigateTo('menu')" class="px-5 py-2.5 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm font-semibold transition">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Ke Menu Utama
+                    </button>
+                    <button onclick="navigateTo('tujuan')" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold transition">
+                        Lanjut ke Tujuan <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. PAGE: TUJUAN PEMBELAJARAN -->
+        <section id="page-tujuan" class="page-content hidden">
+            <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-xl max-w-4xl mx-auto">
+                <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-gray-200 dark:border-gray-800">
+                    <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">TUJUAN PEMBELAJARAN</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Capaian & Indikator Pembelajaran Kelas X SMA/MA</p>
+                    </div>
+                </div>
+
+                <!-- General Objective -->
+                <div class="bg-gradient-to-r from-blue-500 to-sky-600 rounded-2xl p-5 text-white mb-6 shadow-md">
+                    <h3 class="font-bold text-sm uppercase tracking-wider mb-2 opacity-90"><i class="fa-solid fa-star mr-2"></i> Capaian Umum</h3>
+                    <p class="text-sm sm:text-base leading-relaxed font-medium">
+                        "Setelah mengikuti kegiatan pembelajaran menggunakan media interaktif ini, peserta didik diharapkan mampu memahami konsep energi terbarukan, menjelaskan berbagai jenis sumber energi terbarukan, memahami prinsip kerja pemanfaatannya, serta mengidentifikasi manfaat energi terbarukan bagi kehidupan dan lingkungan."
+                    </p>
+                </div>
+
+                <!-- Specific Objectives Grid -->
+                <h3 class="font-bold text-gray-900 dark:text-white text-lg mb-4"><i class="fa-solid fa-list-check text-blue-500 mr-2"></i> Tujuan Khusus / Indikator</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <div class="flex items-start space-x-3 p-4 rounded-xl bg-blue-50 dark:bg-gray-800/60 border border-blue-100 dark:border-gray-700">
+                        <i class="fa-solid fa-circle-check text-blue-500 text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-900 dark:text-white">1. Pengertian Energi Terbarukan</h4>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">Menjelaskan pengertian dan konsep dasar energi terbarukan secara komprehensif.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 p-4 rounded-xl bg-blue-50 dark:bg-gray-800/60 border border-blue-100 dark:border-gray-700">
+                        <i class="fa-solid fa-circle-check text-blue-500 text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-900 dark:text-white">2. Karakteristik Utama</h4>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">Mengidentifikasi karakteristik dan perbedaan energi terbarukan vs tak terbarukan.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 p-4 rounded-xl bg-blue-50 dark:bg-gray-800/60 border border-blue-100 dark:border-gray-700">
+                        <i class="fa-solid fa-circle-check text-blue-500 text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-900 dark:text-white">3. Jenis Energi Terbarukan</h4>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">Menyebutkan dan mengklasifikasikan ragam sumber energi ramah lingkungan.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 p-4 rounded-xl bg-blue-50 dark:bg-gray-800/60 border border-blue-100 dark:border-gray-700">
+                        <i class="fa-solid fa-circle-check text-blue-500 text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-900 dark:text-white">4. Prinsip Kerja Konversi Energi</h4>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">Menjelaskan transformasi energi surya, angin, air, geotermal, dan biomassa menjadi listrik.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 p-4 rounded-xl bg-blue-50 dark:bg-gray-800/60 border border-blue-100 dark:border-gray-700">
+                        <i class="fa-solid fa-circle-check text-blue-500 text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-900 dark:text-white">5. Manfaat &amp; Tantangan</h4>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">Menganalisis dampak ekologis, ekonomi, serta kendala penerapannya di lapangan.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 p-4 rounded-xl bg-blue-50 dark:bg-gray-800/60 border border-blue-100 dark:border-gray-700">
+                        <i class="fa-solid fa-circle-check text-blue-500 text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-900 dark:text-white">6. Sikap Peduli Lingkungan</h4>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">Menunjukkan komitmen dan kesadaran dalam efisiensi energi berkelanjutan.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Back Nav -->
+                <div class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-800">
+                    <button onclick="navigateTo('menu')" class="px-5 py-2.5 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm font-semibold transition">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Ke Menu Utama
+                    </button>
+                    <button onclick="navigateTo('materi')" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold transition">
+                        Mulai Belajar Materi <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. PAGE: MATERI PEMBELAJARAN INTERAKTIF -->
+        <section id="page-materi" class="page-content hidden">
+            <div class="glass-card rounded-3xl p-4 sm:p-8 shadow-xl max-w-5xl mx-auto">
+                <!-- Header Materi + Audio Toolbar -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-gray-200 dark:border-gray-800">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-2xl shrink-0">
+                            <i class="fa-solid fa-solar-panel"></i>
+                        </div>
+                        <div>
+                            <span id="materi-badge" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Subbab 1 dari 6</span>
+                            <h2 id="materi-title" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">1. Pengertian Energi Terbarukan</h2>
+                        </div>
+                    </div>
+
+                    <!-- Audio Text-to-Speech Control Panel -->
+                    <div class="bg-emerald-100/80 dark:bg-gray-800 p-2.5 rounded-2xl flex flex-wrap items-center gap-2 border border-emerald-200 dark:border-gray-700">
+                        <span class="text-xs font-bold text-gray-700 dark:text-gray-300 px-2 flex items-center gap-1">
+                            <i class="fa-solid fa-volume-high text-emerald-600 dark:text-emerald-400"></i> Audio:
+                        </span>
+                        <button onclick="speakMateri()" title="Dengarkan Materi" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center gap-1">
+                            <i class="fa-solid fa-play"></i> Putar
+                        </button>
+                        <button onclick="pauseSpeech()" title="Jeda Audio" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition flex items-center gap-1">
+                            <i class="fa-solid fa-pause"></i> Jeda
+                        </button>
+                        <button onclick="resumeSpeech()" title="Lanjutkan Audio" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition flex items-center gap-1">
+                            <i class="fa-solid fa-forward"></i> Lanjut
+                        </button>
+                        <button onclick="stopSpeech()" title="Hentikan Audio" class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition flex items-center gap-1">
+                            <i class="fa-solid fa-stop"></i> Stop
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Audio Status Indicator -->
+                <div id="audio-status" class="hidden mt-3 px-4 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-xs font-semibold text-emerald-800 dark:text-emerald-300 flex items-center justify-between">
+                    <span class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                        <span id="audio-status-text">Audio sedang membacakan materi...</span>
+                    </span>
+                    <button onclick="stopSpeech()" class="text-rose-500 hover:underline text-xs">Tutup</button>
+                </div>
+
+                <!-- Learning Progress Bar -->
+                <div class="w-full bg-gray-200 dark:bg-gray-800 h-2 rounded-full my-6 overflow-hidden">
+                    <div id="materi-progress-bar" class="bg-gradient-to-r from-emerald-500 to-sky-500 h-full w-1/6 transition-all duration-300"></div>
+                </div>
+
+                <!-- SUBBAB MATERI CONTENT BOX (DYNAMIC VIA JS) -->
+                <div id="materi-body" class="min-h-[350px] text-gray-700 dark:text-gray-300 text-sm sm:text-base leading-relaxed space-y-4">
+                    <!-- Dynamic Material Injected Here -->
+                </div>
+
+                <!-- BOTTOM MATERI NAVIGATION BUTTONS -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 mt-8 border-t border-gray-200 dark:border-gray-800">
+                    <button id="btn-prev-materi" onclick="prevMateri()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm font-semibold transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> Subbab Sebelumnya
+                    </button>
+                    
+                    <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">Gunakan Navigasi Untuk Pindah Subbab</span>
+
+                    <button id="btn-next-materi" onclick="nextMateri()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold transition flex items-center justify-center gap-2">
+                        Subbab Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. PAGE: ASESMEN INTERAKTIF (QUIZ) -->
+        <section id="page-asesmen" class="page-content hidden">
+            <div class="glass-card rounded-3xl p-4 sm:p-8 shadow-xl max-w-4xl mx-auto">
+                <!-- Header Asesmen -->
+                <div class="flex items-center space-x-3 pb-6 border-b border-gray-200 dark:border-gray-800">
+                    <div class="w-12 h-12 rounded-xl bg-purple-600 text-white flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-clipboard-question"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">ASESMEN ENERGI TERBARUKAN</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">15 Soal Pilihan Ganda Interaktif Kelas X</p>
+                    </div>
+                </div>
+
+                <!-- STEP 1: INPUT NAMA PESERTA DIDIK -->
+                <div id="quiz-start-screen" class="my-8 text-center max-w-md mx-auto">
+                    <div class="w-20 h-20 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300 flex items-center justify-center text-4xl mx-auto mb-4 animate-bounce">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Masukkan Identitas Siswa</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">Ketikkan nama lengkap Anda sebelum memulai tes kuis evaluasi ini.</p>
+                    <input type="text" id="student-name-input" placeholder="Nama Lengkap Siswa..." class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:outline-none mb-4 font-semibold">
+                    <button onclick="startQuiz()" class="w-full py-3.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-base shadow-lg transition">
+                        MULAI KERJAKAN KUIS <i class="fa-solid fa-play ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- STEP 2: ACTIVE QUIZ QUESTION DISPLAY -->
+                <div id="quiz-active-screen" class="hidden my-6">
+                    <!-- Question Counter Progress -->
+                    <div class="flex items-center justify-between mb-4">
+                        <span id="quiz-question-num" class="text-xs font-bold px-3 py-1 bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 rounded-full">Soal 1 dari 15</span>
+                        <span id="quiz-score-tracker" class="text-xs font-semibold text-gray-500 dark:text-gray-400">Terjawab: 0 / 15</span>
+                    </div>
+
+                    <!-- Question Card -->
+                    <div class="bg-gray-50 dark:bg-gray-800/80 p-5 rounded-2xl border border-gray-200 dark:border-gray-700 mb-6">
+                        <h3 id="quiz-question-text" class="text-base sm:text-lg font-bold text-gray-900 dark:text-white leading-snug">
+                            [Pertanyaan Kuis]
+                        </h3>
+                    </div>
+
+                    <!-- Answer Options (A, B, C, D) -->
+                    <div id="quiz-options-container" class="space-y-3 mb-6">
+                        <!-- Options injected via JS -->
+                    </div>
+
+                    <!-- Instant Feedback Message Box -->
+                    <div id="quiz-feedback-box" class="hidden p-4 rounded-2xl mb-6 text-sm font-bold border flex items-center space-x-3 animate-fade-in">
+                        <div id="quiz-feedback-icon" class="text-2xl"></div>
+                        <div id="quiz-feedback-text"></div>
+                    </div>
+
+                    <!-- Quiz Action Buttons -->
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-800">
+                        <button id="btn-check-answer" onclick="checkAnswer()" class="px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm shadow transition">
+                            <i class="fa-solid fa-circle-check mr-2"></i> Periksa Jawaban
+                        </button>
+                        <button id="btn-next-question" onclick="nextQuestion()" class="hidden px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow transition">
+                            Soal Berikutnya <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: RESULT REPORT SCREEN -->
+                <div id="quiz-result-screen" class="hidden my-6 text-center">
+                    <div class="glass-card p-6 sm:p-8 rounded-3xl border border-purple-200 dark:border-purple-900/40 max-w-lg mx-auto">
+                        <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-purple-500 to-emerald-400 text-white flex items-center justify-center text-4xl mx-auto mb-4 shadow-lg">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-1">HASIL ASESMEN EVALUASI</h3>
+                        <p id="result-student-name" class="text-sm font-bold text-purple-600 dark:text-purple-400 mb-6">Siswa: -</p>
+
+                        <!-- Score Big Circle -->
+                        <div class="w-36 h-36 rounded-full border-8 border-purple-500 bg-purple-50 dark:bg-gray-800 flex flex-col items-center justify-center mx-auto mb-6 shadow-inner">
+                            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">NILAI AKHIR</span>
+                            <span id="result-final-score" class="text-4xl font-extrabold text-purple-700 dark:text-purple-300">0</span>
+                            <span id="result-percentage" class="text-xs font-bold text-emerald-600">0%</span>
+                        </div>
+
+                        <!-- Statistics Grid -->
+                        <div class="grid grid-cols-2 gap-3 mb-6 text-left">
+                            <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                                <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">Jawaban Benar</span>
+                                <p id="result-correct-count" class="text-lg font-bold text-emerald-600">0 / 15</p>
+                            </div>
+                            <div class="p-3 bg-rose-50 dark:bg-rose-950/40 rounded-xl border border-rose-200 dark:border-rose-800">
+                                <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">Jawaban Salah</span>
+                                <p id="result-wrong-count" class="text-lg font-bold text-rose-600">0 / 15</p>
+                            </div>
+                        </div>
+
+                        <!-- Predicate Badge -->
+                        <div class="p-4 rounded-xl bg-purple-100 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800 mb-6">
+                            <span class="text-xs text-purple-800 dark:text-purple-300 font-semibold block mb-1">Kategori Hasil Belajar:</span>
+                            <span id="result-predicate" class="text-lg font-black text-purple-700 dark:text-purple-300">Sangat Baik</span>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <button onclick="restartQuiz()" class="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm transition">
+                                <i class="fa-solid fa-rotate-right mr-2"></i> Ulangi Asesmen
+                            </button>
+                            <button onclick="navigateTo('menu')" class="w-full py-3 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 text-gray-800 dark:text-gray-200 font-bold text-sm transition">
+                                <i class="fa-solid fa-house mr-2"></i> Menu Utama
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="glass-card mt-auto border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-600 dark:text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 space-y-1">
+            <p class="font-bold text-emerald-700 dark:text-emerald-400">Media Pembelajaran Interaktif Fisika | Energi Terbarukan | Kelas X SMA/MA</p>
+            <p class="font-medium">Dikembangkan oleh: <span class="text-gray-900 dark:text-white font-semibold">Mersy Ruhulessin</span></p>
+            <p class="text-[10px] text-gray-400 dark:text-gray-500 pt-1">© 2026 MPI Fisika Interaktif. Hak Cipta Dilindungi Undang-Undang.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* ==========================================
+           1. NAVIGATION & PAGE CONTROL LOGIC
+           ========================================== */
+        function navigateTo(pageId) {
+            // Hide all page sections
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(page => page.classList.add('hidden'));
+
+            // Show selected page
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Stop speech synthesis if playing during navigation
+            stopSpeech();
+
+            // If entering materi page, render first topic
+            if (pageId === 'materi') {
+                renderMateri();
+            }
+        }
+
+        /* ==========================================
+           2. DIGITAL CLOCK & THEME TOGGLE
+           ========================================== */
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const clockEl = document.getElementById('digital-clock');
+            if (clockEl) {
+                clockEl.textContent = `${hours}:${minutes}:${seconds} WIT`;
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                darkIcon.classList.add('hidden');
+                lightIcon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                darkIcon.classList.remove('hidden');
+                lightIcon.classList.add('hidden');
+            }
+        }
+
+        /* ==========================================
+           3. MATERI DATA & INTERACTIVE SIMULATIONS
+           ========================================== */
+        const materiList = [
+            {
+                id: 1,
+                title: "1. Pengertian Energi Terbarukan",
+                badge: "Subbab 1 dari 6",
+                text: "Energi terbarukan adalah sumber energi yang berasal dari sumber daya alam alami yang tidak akan habis karena dapat diperbarui secara terus-menerus dan alami dalam skala waktu yang relatif singkat. Berbeda dengan bahan bakar fosil seperti minyak bumi, batu bara, dan gas alam yang memerlukan waktu jutaan tahun untuk terbentuk kembali, energi terbarukan menawarkan pasokan yang berkelanjutan dan jauh lebih ramah lingkungan karena menghasilkan emisi karbon yang minim.",
+                html: `
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-gray-800 border-l-4 border-emerald-500">
+                            <h4 class="font-bold text-base text-emerald-800 dark:text-emerald-300 mb-1">Definisi Utama</h4>
+                            <p class="text-sm">Energi terbarukan adalah sumber energi alami yang secara terus-menerus terbarukan dalam waktu singkat tanpa risiko kehabisan pasokan pasca-penggunaan.</p>
+                        </div>
+                        <p>Kebutuhan energi global yang terus meningkat membuat peralihan dari energi fosil menuju energi terbarukan menjadi prioritas utama dunia modern guna mencegah krisis iklim global.</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                            <div class="p-4 rounded-xl bg-emerald-100/50 dark:bg-gray-800 border border-emerald-200 dark:border-gray-700">
+                                <h5 class="font-bold text-emerald-700 dark:text-emerald-400 text-sm mb-1"><i class="fa-solid fa-leaf mr-2"></i>Energi Terbarukan</h5>
+                                <p class="text-xs">Matahari, Angin, Air, Panas Bumi, Biomassa. Berkelanjutan &amp; Rendah Emisi Gas Fosil.</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-rose-100/50 dark:bg-gray-800 border border-rose-200 dark:border-gray-700">
+                                <h5 class="font-bold text-rose-700 dark:text-rose-400 text-sm mb-1"><i class="fa-solid fa-smog mr-2"></i>Energi Tak Terbarukan</h5>
+                                <p class="text-xs">Minyak Bumi, Batu Bara, Gas Alam. Terbatas, menghasilkan emisi karbon tinggi &amp; polusi.</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 2,
+                title: "2. Karakteristik Energi Terbarukan",
+                badge: "Subbab 2 dari 6",
+                text: "Energi terbarukan memiliki berbagai karakteristik khas yang membedakannya secara signifikan dari energi konvensional. Ciri utamanya antara lain bersumber langsung dari proses alam, terbarukan secara spontan, ramah lingkungan dengan emisi karbon sangat rendah, serta berpotensi besar menjamin ketahanan energi jangka panjang bagi generasi mendatang.",
+                html: `
+                    <div class="space-y-4">
+                        <p>Berikut adalah 5 karakteristik utama energi terbarukan yang perlu kamu pahami:</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div class="p-3.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm flex items-start space-x-3">
+                                <i class="fa-solid fa-tree text-emerald-500 text-xl mt-1"></i>
+                                <div>
+                                    <h5 class="font-bold text-sm text-gray-900 dark:text-white">Bersumber dari Alam</h5>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Dihasilkan oleh fenomena alami bumi seperti sinar matahari, angin, dan siklus air.</p>
+                                </div>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm flex items-start space-x-3">
+                                <i class="fa-solid fa-rotate text-emerald-500 text-xl mt-1"></i>
+                                <div>
+                                    <h5 class="font-bold text-sm text-gray-900 dark:text-white">Dapat Diperbarui Alami</h5>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Proses regenerasi terjadi secara terus-menerus tanpa kekhawatiran cadangan habis.</p>
+                                </div>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm flex items-start space-x-3">
+                                <i class="fa-solid fa-hand-holding-droplet text-emerald-500 text-xl mt-1"></i>
+                                <div>
+                                    <h5 class="font-bold text-sm text-gray-900 dark:text-white">Ramah Lingkungan</h5>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Menghasilkan sedikit atau tanpa limbah gas rumah kaca yang memicu pemanasan global.</p>
+                                </div>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm flex items-start space-x-3">
+                                <i class="fa-solid fa-microchip text-emerald-500 text-xl mt-1"></i>
+                                <div>
+                                    <h5 class="font-bold text-sm text-gray-900 dark:text-white">Butuh Teknologi Khusus</h5>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Memerlukan investasi perangkat konversi seperti fotovoltaik dan turbin angin modern.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 3,
+                title: "3. Jenis-Jenis Energi Terbarukan & Simulasi",
+                badge: "Subbab 3 dari 6",
+                text: "Ada lima jenis energi terbarukan utama yaitu Energi Surya dari radiasi matahari, Energi Angin dari pergerakan udara, Energi Air dari potensi aliran hidro, Energi Geotermal dari panas bumi, dan Energi Biomassa dari bahan organik makhluk hidup.",
+                html: `
+                    <div class="space-y-6">
+                        <p>Mari pelajari jenis-jenis energi terbarukan beserta simulasi fisikanya di bawah ini:</p>
+
+                        <!-- SIMULASI 1: PANEL SURYA -->
+                        <div class="p-5 rounded-2xl bg-sky-50 dark:bg-gray-800 border border-sky-200 dark:border-gray-700">
+                            <h4 class="font-bold text-base text-sky-800 dark:text-sky-300 mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-sun text-amber-500"></i> A. Energi Surya (Solar Energy) &amp; Simulasi
+                            </h4>
+                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-4">Panel surya memanfaatkan efek fotovoltaik untuk mengubah energi cahaya (foton) langsung menjadi energi listrik.</p>
+
+                            <!-- Interactive Controls & Canvas -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                                <div class="space-y-3">
+                                    <label class="text-xs font-bold text-gray-700 dark:text-gray-300 block">Intensitas Cahaya Matahari: <span id="sun-val" class="text-amber-600 font-extrabold">50%</span></label>
+                                    <input type="range" id="sun-slider" min="0" max="100" value="50" oninput="updateSolarSim()" class="w-full accent-amber-500 cursor-pointer">
+                                    
+                                    <div class="p-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 text-xs space-y-1">
+                                        <p>Daya Listrik Terhasilkan: <strong id="solar-power" class="text-emerald-600">250 Watt</strong></p>
+                                        <p>Efisiensi Konversi: <strong class="text-sky-600">20%</strong></p>
+                                    </div>
+                                </div>
+
+                                <!-- Solar SVG Graphic -->
+                                <div class="bg-gray-900 p-4 rounded-xl text-center relative overflow-hidden h-36 flex items-center justify-center">
+                                    <div id="sun-glow" class="w-16 h-16 rounded-full bg-amber-400 blur-md absolute top-2 left-4 transition-all duration-300"></div>
+                                    <div class="z-10 bg-blue-900 border-2 border-sky-400 rounded-lg p-3 w-40 text-white font-mono text-xs">
+                                        <i class="fa-solid fa-solar-panel text-2xl text-sky-300 mb-1"></i>
+                                        <div>PANEL SURYA</div>
+                                        <div id="solar-status" class="text-[10px] text-emerald-400 font-bold mt-1">GENERATING...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SIMULASI 2: TURBIN ANGIN -->
+                        <div class="p-5 rounded-2xl bg-emerald-50 dark:bg-gray-800 border border-emerald-200 dark:border-gray-700">
+                            <h4 class="font-bold text-base text-emerald-800 dark:text-emerald-300 mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-wind text-sky-500"></i> B. Energi Angin (Wind Energy) &amp; Simulasi
+                            </h4>
+                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-4">Turbin angin mengubah energi kinetik pergerakan angin menjadi energi mekanik putaran rotor, lalu dinamo generator mengubahnya menjadi listrik.</p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                                <div class="space-y-3">
+                                    <label class="text-xs font-bold text-gray-700 dark:text-gray-300 block">Kecepatan Angin: <span id="wind-val" class="text-sky-600 font-extrabold">12 m/s</span></label>
+                                    <input type="range" id="wind-slider" min="0" max="30" value="12" oninput="updateWindSim()" class="w-full accent-sky-500 cursor-pointer">
+                                    
+                                    <div class="p-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 text-xs space-y-1">
+                                        <p>Kecepatan Putar Rotor: <strong id="wind-rpm" class="text-sky-600">24 RPM</strong></p>
+                                        <p>Output Listrik: <strong id="wind-power" class="text-emerald-600">450 kW</strong></p>
+                                    </div>
+                                </div>
+
+                                <div class="bg-slate-900 p-4 rounded-xl text-center relative overflow-hidden h-36 flex items-center justify-center">
+                                    <i id="wind-icon" class="fa-solid fa-fan text-6xl text-slate-200 transition-all"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- HYDRO, GEOTHERMAL, BIOMASS SUMMARY -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="p-3.5 rounded-xl bg-blue-50 dark:bg-gray-800 border border-blue-200 dark:border-gray-700">
+                                <h5 class="font-bold text-xs text-blue-700 dark:text-blue-300 mb-1"><i class="fa-solid fa-water mr-1"></i> C. Energi Air</h5>
+                                <p class="text-[11px] text-gray-600 dark:text-gray-400">Memanfaatkan tinggi jatuh air di PLTA untuk memutar turbin generator.</p>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-amber-50 dark:bg-gray-800 border border-amber-200 dark:border-gray-700">
+                                <h5 class="font-bold text-xs text-amber-700 dark:text-amber-300 mb-1"><i class="fa-solid fa-volcano mr-1"></i> D. Panas Bumi</h5>
+                                <p class="text-[11px] text-gray-600 dark:text-gray-400">Menggunakan uap alami kerak bumi untuk menggerakkan turbin geotermal.</p>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-emerald-50 dark:bg-gray-800 border border-emerald-200 dark:border-gray-700">
+                                <h5 class="font-bold text-xs text-emerald-700 dark:text-emerald-300 mb-1"><i class="fa-solid fa-seedling mr-1"></i> E. Biomassa</h5>
+                                <p class="text-[11px] text-gray-600 dark:text-gray-400">Pemanfaatan limbah pertanian &amp; sampah organik menjadi bahan bakar biogas.</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 4,
+                title: "4. Manfaat Energi Terbarukan",
+                badge: "Subbab 4 dari 6",
+                text: "Penerapan energi terbarukan membawa manfaat ekologis dan ekonomi yang sangat besar. Manfaat utamanya antara lain mengurangi emisi gas rumah kaca penyebab pemanasan global, menurunkan ketergantungan pada minyak fosil impor, menjaga kualitas udara dan kesehatan masyarakat, serta membuka lapangan kerja baru di bidang teknologi hijau.",
+                html: `
+                    <div class="space-y-4">
+                        <p>Mengapa dunia harus beralih ke energi terbarukan? Berikut adalah manfaat utamanya:</p>
+                        <div class="space-y-3">
+                            <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-gray-800 border border-emerald-200 dark:border-gray-700 flex items-start space-x-3">
+                                <div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 font-bold">1</div>
+                                <div>
+                                    <h5 class="font-bold text-sm text-gray-900 dark:text-white">Menurunkan Emisi Gas Rumah Kaca</h5>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Mengurangi jejak karbon secara signifikan untuk menahan laju kenaikan suhu bumi.</p>
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-gray-800 border border-emerald-200 dark:border-gray-700 flex items-start space-x-3">
+                                <div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 font-bold">2</div>
+                                <div>
+                                    <h5 class="font-bold text-sm text-gray-900 dark:text-white">Ketahanan Energi Nasional</h5>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Mengurangi ketergantungan bahan bakar fosil impor dari negara lain.</p>
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-gray-800 border border-emerald-200 dark:border-gray-700 flex items-start space-x-3">
+                                <div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 font-bold">3</div>
+                                <div>
+                                    <h5 class="font-bold text-sm text-gray-900 dark:text-white">Meningkatkan Kualitas Udara &amp; Kesehatan</h5>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Bebas dari polusi jelaga batu bara yang membahayakan pernapasan masyarakat.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 5,
+                title: "5. Tantangan Pengembangan Energi Terbarukan",
+                badge: "Subbab 5 dari 6",
+                text: "Meskipun memiliki banyak keunggulan, pengembangan energi terbarukan di lapangan menghadapi beberapa tantangan teknis dan ekonomis. Tantangan tersebut mencakup biaya investasi awal pabrik yang tinggi, ketergantungan pada kondisi cuaca alam yang tidak menentu, serta kebutuhan akan baterai penyimpanan energi berkapasitas besar.",
+                html: `
+                    <div class="space-y-4">
+                        <p>Kendala dan tantangan nyata dalam implementasi energi terbarukan saat ini:</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="p-4 rounded-xl bg-amber-50 dark:bg-gray-800 border border-amber-200 dark:border-gray-700">
+                                <i class="fa-solid fa-coins text-amber-500 text-2xl mb-2"></i>
+                                <h5 class="font-bold text-sm text-gray-900 dark:text-white mb-1">Biaya Investasi Awal</h5>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">Pembangunan infrastruktur awal membutuhkan anggaran dana yang relatif besar.</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-amber-50 dark:bg-gray-800 border border-amber-200 dark:border-gray-700">
+                                <i class="fa-solid fa-cloud-sun-rain text-amber-500 text-2xl mb-2"></i>
+                                <h5 class="font-bold text-sm text-gray-900 dark:text-white mb-1">Faktor Cuaca (Intermitensi)</h5>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">Output energi matahari dan angin bergantung pada kondisi cuaca harian.</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-amber-50 dark:bg-gray-800 border border-amber-200 dark:border-gray-700">
+                                <i class="fa-solid fa-battery-half text-amber-500 text-2xl mb-2"></i>
+                                <h5 class="font-bold text-sm text-gray-900 dark:text-white mb-1">Teknologi Baterai</h5>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">Penyimpanan energi skala besar membutuhkan teknologi baterai berdaya tahan tinggi.</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 6,
+                title: "6. Penerapan di Indonesia & Aktivitas Interaktif",
+                badge: "Subbab 6 dari 6",
+                text: "Indonesia memiliki potensi energi terbarukan yang sangat melimpah seperti PLTS floating di waduk, PLTB Sidrap Sulawesi Selatan, PLTA, dan potensi geotermal terbesar di dunia karena berada dalam jalur cincin api pasifik.",
+                html: `
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-gray-800 border border-emerald-200 dark:border-gray-700">
+                            <h4 class="font-bold text-base text-emerald-800 dark:text-emerald-300 mb-2">Potensi Energi Terbarukan Indonesia</h4>
+                            <p class="text-xs sm:text-sm">Sebagai negara kepulauan tropis di khatulistiwa dan jalur Gunung Berapi (Ring of Fire), Indonesia menyimpan potensi Panas Bumi (Geotermal), Surya, dan Hidro yang luar biasa besar untuk mendukung transisi energi hijau nasional.</p>
+                        </div>
+
+                        <!-- DRAG & DROP / MATCHING MINI ACTIVITY -->
+                        <div class="p-5 rounded-2xl bg-purple-50 dark:bg-gray-800 border border-purple-200 dark:border-gray-700">
+                            <h4 class="font-bold text-sm text-purple-800 dark:text-purple-300 mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-gamepad"></i> Mini Kuis Interaktif: Cocokkan Sumber Energi!
+                            </h4>
+                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-4">Klik pada jawaban pilihan jenis energi yang sesuai untuk pernyataan di bawah ini:</p>
+
+                            <div class="space-y-3 text-xs">
+                                <div class="p-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                                    <span>Pembangkit Listrik di Sidrap Sulsel memanfaatkan:</span>
+                                    <div class="flex gap-2">
+                                        <button onclick="checkMiniQuiz(this, false)" class="px-2.5 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-emerald-500 hover:text-white">Matahari</button>
+                                        <button onclick="checkMiniQuiz(this, true)" class="px-2.5 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-emerald-500 hover:text-white">Angin</button>
+                                        <button onclick="checkMiniQuiz(this, false)" class="px-2.5 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-emerald-500 hover:text-white">Biomassa</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        let currentMateriIndex = 0;
+
+        function renderMateri() {
+            const materi = materiList[currentMateriIndex];
+            document.getElementById('materi-title').textContent = materi.title;
+            document.getElementById('materi-badge').textContent = materi.badge;
+            document.getElementById('materi-body').innerHTML = materi.html;
+
+            // Update Progress Bar
+            const progressPercent = ((currentMateriIndex + 1) / materiList.length) * 100;
+            document.getElementById('materi-progress-bar').style.width = `${progressPercent}%`;
+
+            // Button disable state
+            document.getElementById('btn-prev-materi').disabled = (currentMateriIndex === 0);
+            document.getElementById('btn-prev-materi').style.opacity = (currentMateriIndex === 0) ? '0.5' : '1';
+
+            if (currentMateriIndex === materiList.length - 1) {
+                document.getElementById('btn-next-materi').innerHTML = 'Ke Asesmen Evaluasi <i class="fa-solid fa-clipboard-check ml-1"></i>';
+            } else {
+                document.getElementById('btn-next-materi').innerHTML = 'Subbab Selanjutnya <i class="fa-solid fa-arrow-right ml-1"></i>';
+            }
+        }
+
+        function nextMateri() {
+            stopSpeech();
+            if (currentMateriIndex < materiList.length - 1) {
+                currentMateriIndex++;
+                renderMateri();
+            } else {
+                navigateTo('asesmen');
+            }
+        }
+
+        function prevMateri() {
+            stopSpeech();
+            if (currentMateriIndex > 0) {
+                currentMateriIndex--;
+                renderMateri();
+            }
+        }
+
+        // Interactive Solar Simulation Logic
+        function updateSolarSim() {
+            const val = document.getElementById('sun-slider').value;
+            document.getElementById('sun-val').textContent = val + '%';
+            document.getElementById('solar-power').textContent = (val * 5) + ' Watt';
+            const glow = document.getElementById('sun-glow');
+            if (glow) {
+                glow.style.opacity = val / 100;
+                glow.style.transform = `scale(${0.5 + (val/100)*0.8})`;
+            }
+        }
+
+        // Interactive Wind Simulation Logic
+        function updateWindSim() {
+            const val = document.getElementById('wind-slider').value;
+            document.getElementById('wind-val').textContent = val + ' m/s';
+            document.getElementById('wind-rpm').textContent = (val * 2) + ' RPM';
+            document.getElementById('wind-power').textContent = (val * 35) + ' kW';
+            const windIcon = document.getElementById('wind-icon');
+            if (windIcon) {
+                if (val == 0) {
+                    windIcon.style.animation = 'none';
+                } else {
+                    const speed = Math.max(0.2, 3 - (val / 10));
+                    windIcon.style.animation = `spin ${speed}s linear infinite`;
+                }
+            }
+        }
+
+        function checkMiniQuiz(btn, isCorrect) {
+            if (isCorrect) {
+                btn.className = "px-2.5 py-1 bg-emerald-600 text-white font-bold rounded";
+                btn.textContent = "✓ Benar!";
+                confetti({ particleCount: 30, spread: 60, origin: { y: 0.8 } });
+            } else {
+                btn.className = "px-2.5 py-1 bg-rose-600 text-white font-bold rounded";
+                btn.textContent = "✗ Salah!";
+            }
+        }
+
+        /* ==========================================
+           4. AUDIO NARRATION (TEXT-TO-SPEECH API)
+           ========================================== */
+        let synth = window.speechSynthesis;
+        let currentUtterance = null;
+
+        function speakMateri() {
+            if (!synth) {
+                alert("Maaf, peramban browser Anda tidak mendukung fitur Text-to-Speech audio.");
+                return;
+            }
+
+            // Cancel any current speech
+            synth.cancel();
+
+            const textToSpeak = materiList[currentMateriIndex].text;
+            currentUtterance = new SpeechSynthesisUtterance(textToSpeak);
+            currentUtterance.lang = 'id-ID';
+            currentUtterance.rate = 0.95; // Speech speed
+
+            const statusBox = document.getElementById('audio-status');
+            const statusText = document.getElementById('audio-status-text');
+
+            currentUtterance.onstart = function () {
+                if (statusBox) statusBox.classList.remove('hidden');
+                if (statusText) statusText.textContent = `Membacakan Audio Subbab ${currentMateriIndex + 1}...`;
+            };
+
+            currentUtterance.onend = function () {
+                if (statusBox) statusBox.classList.add('hidden');
+            };
+
+            currentUtterance.onerror = function () {
+                if (statusBox) statusBox.classList.add('hidden');
+            };
+
+            synth.speak(currentUtterance);
+        }
+
+        function pauseSpeech() {
+            if (synth && synth.speaking) {
+                synth.pause();
+                const statusText = document.getElementById('audio-status-text');
+                if (statusText) statusText.textContent = "Audio Dijeda (Pause)";
+            }
+        }
+
+        function resumeSpeech() {
+            if (synth && synth.paused) {
+                synth.resume();
+                const statusText = document.getElementById('audio-status-text');
+                if (statusText) statusText.textContent = "Melanjutkan Pembacaan Audio...";
+            }
+        }
+
+        function stopSpeech() {
+            if (synth) {
+                synth.cancel();
+                const statusBox = document.getElementById('audio-status');
+                if (statusBox) statusBox.classList.add('hidden');
+            }
+        }
+
+        /* ==========================================
+           5. ASESMEN INTERAKTIF (15 QUESTIONS QUIZ)
+           ========================================== */
+        const quizQuestions = [
+            {
+                q: "1. Apa yang dimaksud dengan energi terbarukan?",
+                options: [
+                    "A. Energi yang berasal dari fosil jutaan tahun lalu",
+                    "B. Energi yang dapat diperbarui secara alami dalam skala waktu singkat",
+                    "C. Energi yang akan habis jika dipakai terus-menerus",
+                    "D. Energi hasil olahan bahan kimia sintetis"
+                ],
+                correct: 1
+            },
+            {
+                q: "2. Manakah di bawah ini yang MERUPAKAN contoh sumber energi terbarukan?",
+                options: [
+                    "A. Batu bara dan Minyak Bumi",
+                    "B. Gas Alam dan Uranium",
+                    "C. Matahari, Angin, dan Air",
+                    "D. Bensin dan Solar"
+                ],
+                correct: 2
+            },
+            {
+                q: "3. Perangkat yang digunakan untuk mengubah energi cahaya matahari langsung menjadi energi listrik dinamakan...",
+                options: [
+                    "A. Turbin Generator",
+                    "B. Panel Surya (Fotovoltaik)",
+                    "C. Boiler Geotermal",
+                    "D. Bio-kolektor"
+                ],
+                correct: 1
+            },
+            {
+                q: "4. Perubahan energi apa yang terjadi pada pembangkit listrik tenaga angin (PLTB)?",
+                options: [
+                    "A. Energi Kinetik -> Energi Mekanik -> Energi Listrik",
+                    "B. Energi Kimia -> Energi Listrik",
+                    "C. Energi Potensial -> Energi Panas -> Energi Listrik",
+                    "D. Energi Nuklir -> Energi Listrik"
+                ],
+                correct: 0
+            },
+            {
+                q: "5. Sumber energi terbarukan yang memanfaatkan panas dari dalam kerak bumi disebut...",
+                options: [
+                    "A. Biomassa",
+                    "B. Hidroelektrik",
+                    "C. Geotermal (Panas Bumi)",
+                    "D. Pasang Surut Air Laut"
+                ],
+                correct: 2
+            },
+            {
+                q: "6. Bahan organik yang berasal dari limbah pertanian atau kotoran ternak yang diolah menjadi sumber energi disebut...",
+                options: [
+                    "A. Biomassa",
+                    "B. Batu Bara",
+                    "C. Petroleum",
+                    "D. Geotermal"
+                ],
+                correct: 0
+            },
+            {
+                q: "7. Pada Pembangkit Listrik Tenaga Air (PLTA), energi apa yang pertama kali dimanfaatkan dari air bendungan tinggi?",
+                options: [
+                    "A. Energi Cahaya",
+                    "B. Energi Potensial Gravitasi",
+                    "C. Energi Kimia",
+                    "D. Energi Kalor"
+                ],
+                correct: 1
+            },
+            {
+                q: "8. Manakah yang termasuk MANFAAT utama dari penggunaan energi terbarukan?",
+                options: [
+                    "A. Meningkatkan emisi gas rumah kaca",
+                    "B. Mempercepat pemanasan global",
+                    "C. Mengurangi polusi udara dan ketahanan energi",
+                    "D. Menghabiskan pasokan bahan bakar minyak"
+                ],
+                correct: 2
+            },
+            {
+                q: "9. Salah satu TANTANGAN utama dalam pengembangan energi surya dan angin adalah...",
+                options: [
+                    "A. Pasokan energi selalu konstan 24 jam",
+                    "B. Bergantung pada kondisi cuaca (intermitensi)",
+                    "C. Menghasilkan limbah radiasi nuklir",
+                    "D. Tidak membutuhkan instalasi perangkat"
+                ],
+                correct: 1
+            },
+            {
+                q: "10. Kebun angin PLTB terbesar di Indonesia berlokasi di daerah...",
+                options: [
+                    "A. Sidrap, Sulawesi Selatan",
+                    "B. Ambon, Maluku",
+                    "C. Jakarta Pusat",
+                    "D. Denpasar, Bali"
+                ],
+                correct: 0
+            },
+            {
+                q: "11. Alat yang berfungsi mengubah energi gerak putaran turbin menjadi energi listrik adalah...",
+                options: [
+                    "A. Transformator Step-Down",
+                    "B. Akumulator (Aki)",
+                    "C. Generator / Dinamo",
+                    "D. Inverter"
+                ],
+                correct: 2
+            },
+            {
+                q: "12. Mengapa bahan bakar fosil TIDAK dikategorikan sebagai energi terbarukan?",
+                options: [
+                    "A. Karena harganya sangat murah",
+                    "B. Karena membutuhkan jutaan tahun untuk terbentuk kembali",
+                    "C. Karena tidak menghasilkan emisi asap",
+                    "D. Karena jumlahnya tak terbatas di bumi"
+                ],
+                correct: 1
+            },
+            {
+                q: "13. Gas utama pemicu pemanasan global yang dihasilkan dari pembakaran batu bara adalah...",
+                options: [
+                    "A. Oksigen (O2)",
+                    "B. Karbon Dioxida (CO2)",
+                    "C. Nitrogen (N2)",
+                    "D. Helium (He)"
+                ],
+                correct: 1
+            },
+            {
+                q: "14. Contoh penerapan sederhana energi terbarukan di rumah tangga adalah...",
+                options: [
+                    "A. Menyalakan genset bermesin bensin",
+                    "B. Memasang lampu penerangan jalan tenaga surya",
+                    "C. Membakar minyak tanah",
+                    "D. Menggunakan kompor batu bara"
+                ],
+                correct: 1
+            },
+            {
+                q: "15. Istilah 'Green Technology' atau Teknologi Hijau merujuk pada...",
+                options: [
+                    "A. Teknologi pewarnaan daun",
+                    "B. Teknologi ramah lingkungan yang menghemat energi & sumber daya",
+                    "C. Teknologi penciptaan batu bara sintetis",
+                    "D. Peralatan elektronik berwarna hijau"
+                ],
+                correct: 1
+            }
+        ];
+
+        let studentName = "";
+        let currentQuestionIndex = 0;
+        let selectedOption = null;
+        let userAnswers = [];
+
+        function startQuiz() {
+            const input = document.getElementById('student-name-input');
+            if (!input.value.trim()) {
+                alert("Harap masukkan nama lengkap Anda terlebih dahulu!");
+                return;
+            }
+
+            studentName = input.value.trim();
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            selectedOption = null;
+
+            document.getElementById('quiz-start-screen').classList.add('hidden');
+            document.getElementById('quiz-result-screen').classList.add('hidden');
+            document.getElementById('quiz-active-screen').classList.remove('hidden');
+
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const q = quizQuestions[currentQuestionIndex];
+            selectedOption = null;
+
+            document.getElementById('quiz-question-num').textContent = `Soal ${currentQuestionIndex + 1} dari 15`;
+            document.getElementById('quiz-score-tracker').textContent = `Terjawab: ${userAnswers.length} / 15`;
+            document.getElementById('quiz-question-text').textContent = q.q;
+
+            // Hide feedback box & Reset buttons
+            document.getElementById('quiz-feedback-box').classList.add('hidden');
+            document.getElementById('btn-check-answer').classList.remove('hidden');
+            document.getElementById('btn-next-question').classList.add('hidden');
+
+            // Render Options
+            const container = document.getElementById('quiz-options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const optBtn = document.createElement('button');
+                optBtn.className = "w-full p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-purple-50 dark:hover:bg-purple-950/40 text-left text-sm font-semibold text-gray-800 dark:text-gray-200 transition flex items-center justify-between group";
+                optBtn.onclick = () => selectOption(idx, optBtn);
+                optBtn.innerHTML = `
+                    <span>${opt}</span>
+                    <i class="fa-regular fa-circle text-gray-400 group-hover:text-purple-500 opt-icon"></i>
+                `;
+                container.appendChild(optBtn);
+            });
+        }
+
+        function selectOption(index, buttonEl) {
+            // Unselect all option buttons
+            const allBtns = document.getElementById('quiz-options-container').children;
+            for (let btn of allBtns) {
+                btn.className = "w-full p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-purple-50 dark:hover:bg-purple-950/40 text-left text-sm font-semibold text-gray-800 dark:text-gray-200 transition flex items-center justify-between group";
+                const icon = btn.querySelector('.opt-icon');
+                if (icon) icon.className = "fa-regular fa-circle text-gray-400 group-hover:text-purple-500 opt-icon";
+            }
+
+            // Highlight selected button
+            selectedOption = index;
+            buttonEl.className = "w-full p-4 rounded-xl border-2 border-purple-600 bg-purple-50 dark:bg-purple-950/60 text-left text-sm font-bold text-purple-900 dark:text-purple-200 transition flex items-center justify-between";
+            const selectedIcon = buttonEl.querySelector('.opt-icon');
+            if (selectedIcon) selectedIcon.className = "fa-solid fa-circle-check text-purple-600 dark:text-purple-400 opt-icon text-lg";
+        }
+
+        function checkAnswer() {
+            if (selectedOption === null) {
+                alert("Pilihlah salah satu opsi jawaban terlebih dahulu!");
+                return;
+            }
+
+            const q = quizQuestions[currentQuestionIndex];
+            const isCorrect = (selectedOption === q.correct);
+            userAnswers[currentQuestionIndex] = isCorrect;
+
+            const feedbackBox = document.getElementById('quiz-feedback-box');
+            const feedbackIcon = document.getElementById('quiz-feedback-icon');
+            const feedbackText = document.getElementById('quiz-feedback-text');
+
+            feedbackBox.classList.remove('hidden');
+
+            if (isCorrect) {
+                feedbackBox.className = "p-4 rounded-2xl mb-6 text-sm font-bold bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200 flex items-start space-x-3";
+                feedbackIcon.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 text-2xl"></i>`;
+                feedbackText.innerHTML = `🎉 Hebat! Jawaban kamu benar. Pertahankan semangat belajarmu!`;
+                
+                // Fire Confetti Animation
+                confetti({
+                    particleCount: 50,
+                    spread: 70,
+                    origin: { y: 0.7 }
+                });
+            } else {
+                feedbackBox.className = "p-4 rounded-2xl mb-6 text-sm font-bold bg-rose-100 dark:bg-rose-950/80 border border-rose-300 dark:border-rose-700 text-rose-900 dark:text-rose-200 flex items-start space-x-3";
+                feedbackIcon.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600 text-2xl"></i>`;
+                feedbackText.innerHTML = `💪 Belum tepat, ayo coba lagi! Pelajari kembali materi dan jangan menyerah.`;
+            }
+
+            // Disable option selection after check
+            const allBtns = document.getElementById('quiz-options-container').children;
+            for (let btn of allBtns) {
+                btn.onclick = null;
+            }
+
+            // Toggle Action buttons
+            document.getElementById('btn-check-answer').classList.add('hidden');
+            document.getElementById('btn-next-question').classList.remove('hidden');
+
+            if (currentQuestionIndex === quizQuestions.length - 1) {
+                document.getElementById('btn-next-question').innerHTML = 'Lihat Hasil Akhir <i class="fa-solid fa-trophy ml-2"></i>';
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizQuestions.length - 1) {
+                currentQuestionIndex++;
+                renderQuizQuestion();
+            } else {
+                showQuizResults();
+            }
+        }
+
+        function showQuizResults() {
+            document.getElementById('quiz-active-screen').classList.add('hidden');
+            document.getElementById('quiz-result-screen').classList.remove('hidden');
+
+            const correctCount = userAnswers.filter(ans => ans === true).length;
+            const wrongCount = quizQuestions.length - correctCount;
+            const finalScore = Math.round((correctCount / quizQuestions.length) * 100);
+
+            document.getElementById('result-student-name').textContent = `Siswa: ${studentName}`;
+            document.getElementById('result-final-score').textContent = finalScore;
+            document.getElementById('result-percentage').textContent = `${finalScore}%`;
+            document.getElementById('result-correct-count').textContent = `${correctCount} / 15`;
+            document.getElementById('result-wrong-count').textContent = `${wrongCount} / 15`;
+
+            // Predicate Determination
+            let predicate = "";
+            const predEl = document.getElementById('result-predicate');
+
+            if (finalScore >= 90) {
+                predicate = "Sangat Baik (Luar Biasa!) 🌟";
+                predEl.className = "text-lg font-black text-emerald-600 dark:text-emerald-400";
+            } else if (finalScore >= 80) {
+                predicate = "Baik (Tingkatkan terus!) 👍";
+                predEl.className = "text-lg font-black text-blue-600 dark:text-blue-400";
+            } else if (finalScore >= 70) {
+                predicate = "Cukup (Perlu latihan lagi) 👌";
+                predEl.className = "text-lg font-black text-amber-600 dark:text-amber-400";
+            } else {
+                predicate = "Perlu Belajar Lagi (Jangan menyerah!) 💪";
+                predEl.className = "text-lg font-black text-rose-600 dark:text-rose-400";
+            }
+
+            predEl.textContent = predicate;
+        }
+
+        function restartQuiz() {
+            document.getElementById('quiz-result-screen').classList.add('hidden');
+            document.getElementById('quiz-start-screen').classList.remove('hidden');
+        }
+
+        // Initialize default view on load
+        window.onload = function() {
+            navigateTo('cover');
+        };
+    </script>
+</body>
+</html>
